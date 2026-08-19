@@ -24,7 +24,6 @@ class ProductsPage {
   viewCart() {
     cy.contains('View Cart').click()
   }
-}
 
   removeFromCart() {
     cy.get('.cart_quantity_delete').first().click()
@@ -33,5 +32,6 @@ class ProductsPage {
   updateCartQuantity(index, quantity) {
     cy.get('.cart_quantity input').eq(index).clear().type(quantity)
   }
+}
 
 export default new ProductsPage()
