@@ -1,6 +1,36 @@
 describe('API - Verify Login', () => {
-  const registeredEmail = 'sinwansherqa@gmail.com'
-  const registeredPassword = '123456'
+  const registeredEmail = `sinwanlogin${Date.now()}@test.com`
+  const registeredPassword = 'Test@1234'
+
+  // Pehle ye account khud banate hain, taake login tests
+  // kisi manual/external account pe depend na karein
+  it('should create the account used for login tests', () => {
+    cy.request({
+      method: 'POST',
+      url: '/api/createAccount',
+      form: true,
+      body: {
+        name: 'Login Test User',
+        email: registeredEmail,
+        password: registeredPassword,
+        title: 'Mr',
+        birth_date: '1',
+        birth_month: '1',
+        birth_year: '1995',
+        firstname: 'Login',
+        lastname: 'Test',
+        address1: 'Test Address',
+        country: 'Pakistan',
+        zipcode: '25000',
+        state: 'KPK',
+        city: 'Peshawar',
+        mobile_number: '03001234567'
+      }
+    }).then((response) => {
+      const body = typeof response.body === 'string' ? JSON.parse(response.body) : response.body
+      expect(body.responseCode).to.eq(201)
+    })
+  })
 
   it('should login successfully with valid credentials', () => {
     cy.request({
@@ -12,9 +42,10 @@ describe('API - Verify Login', () => {
         password: registeredPassword
       }
     }).then((response) => {
+      const body = typeof response.body === 'string' ? JSON.parse(response.body) : response.body
       expect(response.status).to.eq(200)
-      expect(response.body.responseCode).to.eq(200)
-      expect(response.body.message).to.eq('User exists!')
+      expect(body.responseCode).to.eq(200)
+      expect(body.message).to.eq('User exists!')
     })
   })
 
@@ -29,8 +60,9 @@ describe('API - Verify Login', () => {
         password: 'WrongPassword123'
       }
     }).then((response) => {
-      expect(response.body.responseCode).to.eq(404)
-      expect(response.body.message).to.eq('User not found!')
+      const body = typeof response.body === 'string' ? JSON.parse(response.body) : response.body
+      expect(body.responseCode).to.eq(404)
+      expect(body.message).to.eq('User not found!')
     })
   })
 
@@ -44,8 +76,9 @@ describe('API - Verify Login', () => {
         password: registeredPassword
       }
     }).then((response) => {
-      expect(response.body.responseCode).to.eq(400)
-      expect(response.body.message).to.eq('Bad request, email or password parameter is missing in POST request.')
+      const body = typeof response.body === 'string' ? JSON.parse(response.body) : response.body
+      expect(body.responseCode).to.eq(400)
+      expect(body.message).to.eq('Bad request, email or password parameter is missing in POST request.')
     })
   })
 
@@ -57,7 +90,8 @@ describe('API - Verify Login', () => {
       failOnStatusCode: false,
       body: {}
     }).then((response) => {
-      expect(response.body.responseCode).to.eq(400)
+      const body = typeof response.body === 'string' ? JSON.parse(response.body) : response.body
+      expect(body.responseCode).to.eq(400)
     })
   })
 
@@ -67,7 +101,8 @@ describe('API - Verify Login', () => {
       url: '/api/verifyLogin',
       failOnStatusCode: false
     }).then((response) => {
-      expect(response.body.responseCode).to.eq(405)
+      const body = typeof response.body === 'string' ? JSON.parse(response.body) : response.body
+      expect(body.responseCode).to.eq(405)
     })
   })
 })
