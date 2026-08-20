@@ -4,10 +4,11 @@ describe('API - Products List', () => {
       method: 'GET',
       url: '/api/productsList'
     }).then((response) => {
+      const body = typeof response.body === 'string' ? JSON.parse(response.body) : response.body
       expect(response.status).to.eq(200)
-      expect(response.body.responseCode).to.eq(200)
-      expect(response.body.products).to.be.an('array')
-      expect(response.body.products.length).to.be.greaterThan(0)
+      expect(body.responseCode).to.eq(200)
+      expect(body.products).to.be.an('array')
+      expect(body.products.length).to.be.greaterThan(0)
     })
   })
 
@@ -17,8 +18,9 @@ describe('API - Products List', () => {
       url: '/api/productsList',
       failOnStatusCode: false
     }).then((response) => {
-      expect(response.body.responseCode).to.eq(405)
-      expect(response.body.message).to.eq('This request method is not supported.')
+      const body = typeof response.body === 'string' ? JSON.parse(response.body) : response.body
+      expect(body.responseCode).to.eq(405)
+      expect(body.message).to.eq('This request method is not supported.')
     })
   })
 })

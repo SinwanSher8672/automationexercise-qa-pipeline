@@ -8,10 +8,11 @@ describe('API - Search Product', () => {
         search_product: 'Dress'
       }
     }).then((response) => {
+      const body = typeof response.body === 'string' ? JSON.parse(response.body) : response.body
       expect(response.status).to.eq(200)
-      expect(response.body.responseCode).to.eq(200)
-      expect(response.body.products).to.be.an('array')
-      expect(response.body.products.length).to.be.greaterThan(0)
+      expect(body.responseCode).to.eq(200)
+      expect(body.products).to.be.an('array')
+      expect(body.products.length).to.be.greaterThan(0)
     })
   })
 
@@ -24,8 +25,9 @@ describe('API - Search Product', () => {
         search_product: 'zzzznonexistentproduct123'
       }
     }).then((response) => {
-      expect(response.body.responseCode).to.eq(200)
-      expect(response.body.products).to.have.length(0)
+      const body = typeof response.body === 'string' ? JSON.parse(response.body) : response.body
+      expect(body.responseCode).to.eq(200)
+      expect(body.products).to.have.length(0)
     })
   })
 
@@ -37,8 +39,9 @@ describe('API - Search Product', () => {
       failOnStatusCode: false,
       body: {}
     }).then((response) => {
-      expect(response.body.responseCode).to.eq(400)
-      expect(response.body.message).to.eq('Bad request, search_product parameter is missing in POST request.')
+      const body = typeof response.body === 'string' ? JSON.parse(response.body) : response.body
+      expect(body.responseCode).to.eq(400)
+      expect(body.message).to.eq('Bad request, search_product parameter is missing in POST request.')
     })
   })
 
@@ -48,7 +51,8 @@ describe('API - Search Product', () => {
       url: '/api/searchProduct',
       failOnStatusCode: false
     }).then((response) => {
-      expect(response.body.responseCode).to.eq(405)
+      const body = typeof response.body === 'string' ? JSON.parse(response.body) : response.body
+      expect(body.responseCode).to.eq(405)
     })
   })
 })
